@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Building Robots (GEMS) — Reproducible Benchmark 2026</title>
+<style>
+:root{--bg:#0b1020;--card:#141b33;--line:#263056;--txt:#e8ecff;--mut:#a7b1d6;--acc:#5eead4;--acc2:#a78bfa;--warn:#fbbf24}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:radial-gradient(1200px 600px at 20% -10%,#1b2450 0%,var(--bg) 55%) fixed,var(--bg);color:var(--txt)}
+.wrap{max-width:1080px;margin:0 auto;padding:32px 20px 80px}
+.hero{border:1px solid var(--line);border-radius:20px;padding:28px;background:linear-gradient(180deg,rgba(94,234,212,.08),rgba(167,139,250,.08));}
+.kicker{color:var(--acc);letter-spacing:.12em;font-size:12px;font-weight:700}
+h1{font-size:34px;margin:8px 0 6px}h2{margin-top:34px;border-left:4px solid var(--acc);padding-left:12px}
+.sub{color:var(--mut);font-size:16px;max-width:70ch}
+.badges img{height:20px;margin:6px 6px 0 0;vertical-align:middle}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+.card b{color:var(--acc)}.num{font-size:26px;font-weight:800}
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px}
+th,td{border:1px solid var(--line);padding:8px;text-align:left}th{background:#1a2242}
+code,pre{background:#0e1430;border:1px solid var(--line);border-radius:8px;padding:2px 6px;color:#d7f9f2}pre{padding:14px;overflow:auto}
+.media{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.media figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px}
+.media img,.media video{width:100%;border-radius:10px;background:#000}
+figcaption{color:var(--mut);font-size:13px;margin-top:8px}
+a{color:var(--acc)}footer{color:var(--mut);margin-top:40px;font-size:13px}
+.toc a{display:inline-block;margin:4px 8px 0 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="hero">
+<div class="kicker">TRADE-OFFS, NOT SLOGANS · EVERY NUMBER RECOMPUTED · DOCKER ONE-COMMAND</div>
+<h1>🤖 Building Robots (GEMS): Reproducible Benchmark 2026</h1>
+<p class="sub"><b>CEO summary:</b> This repo turns the 4-course <i>Building Robots: from Mechatronic Components to Robotics</i> program into runnable engineering. DC motor control improves <b>92.8%</b> with empirical tuning. Sensor sampling hits a <b>noise floor</b> — 50× faster sampling buys 1.01×. The slowest bus (<b>CAN 0.55 Mbps</b>) wins the motor network on reliability. The wireless link is <b>47% of the 17 ms control loop</b>. Arm kinematics are exact while open-loop driving drifts — proving sensing + comms must close the loop. If you read only this page, you can build, measure, and defend a real robot integration.</p>
+<div class="badges">
+<img alt="License MIT" src="https://img.shields.io/badge/License-MIT-green.svg">
+<img alt="Python 3.11" src="https://img.shields.io/badge/Python-3.11-blue.svg">
+<img alt="Docker ready" src="https://img.shields.io/badge/Docker-ready-blue.svg">
+<img alt="Tests 10 passing" src="https://img.shields.io/badge/tests-10_passing-brightgreen.svg">
+<img alt="Verify 12 checks" src="https://img.shields.io/badge/verify-12_checks-brightgreen.svg">
+</div>
+<p class="toc">📚 <a href="#beginner">Beginner guide</a> · 🎬 <a href="#demo">Demos</a> · ⚙️ <a href="#quick">Quickstart</a> · 📊 <a href="#results">Results</a> · 🧑‍💻 <a href="#stories">User stories</a> · ✅ <a href="#verify">Verify</a></p>
+<pre>docker compose up --build
+# or: pip install -r requirements.txt &amp;&amp; python scripts/run_all.py &amp;&amp; python scripts/verify.py &amp;&amp; pytest -q</pre>
+</div>
+
+<h2 id="beginner">🌱 Beginner guide — read this and you are a professional</h2>
+<div class="grid">
+<div class="card"><b>Step 1 — What is a robot?</b><br>Mechanics + electronics + software agreeing 58 times per second. This repo proves 58.8 Hz with a 17 ms budget. If the loop misses, the robot wobbles.</div>
+<div class="card"><b>Step 2 — Motion (Diamond).</b><br>A DC motor is a resistor + coil + spinning magnet. Software (PI controller) adjusts voltage 20,000×/s. Score: tuned IAE <b>0.116</b> vs beginner <b>1.611</b>.</div>
+<div class="card"><b>Step 3 — Sensing (Ruby).</b><br>Sensors lie a little (±0.003 V). Sampling faster does not fix lying. Calibrate, then filter. Ultrasound: 6 ms echo = <b>1.03 m</b>.</div>
+<div class="card"><b>Step 4 — Talking (Sapphire).</b><br>Motors want rugged CAN. Encoders want fast SPI. Computers want WiFi. ROS 2 topics stream (0.6 ms), actions command goals (2.6 ms).</div>
+<div class="card"><b>Step 5 — Assembly (Emerald).</b><br>Two wheels + arm + battery + 3D-printed frame + web control. Test: drive 2 s, move arm, measure drift, close the loop.</div>
+<div class="card"><b>Step 6 — Prove it.</b><br>Run the 5 experiments. All outputs regenerate. If a number changes, <code>verify.py</code> fails loudly. That is professionalism.</div>
+</div>
+
+<h2 id="demo">🎬 Demos — watch the physics</h2>
+<div class="media">
+<figure><img src="demo_dc.gif" alt="DC step response animation seed vs tuned"><figcaption><b>DC step to 300 rpm.</b> Slow seed vs tuned kp=0.3/ki=8.0. MP4: <a href="demo_dc.mp4">demo_dc.mp4</a></figcaption><video controls preload="none" src="demo_dc.mp4"></video></figure>
+<figure><img src="demo_robot.gif" alt="Differential drive and 2R arm animation"><figcaption><b>Left:</b> diff-drive odometry trail. <b>Right:</b> 2R arm sweep (exact FK/IK). MP4: <a href="demo_robot.mp4">demo_robot.mp4</a></figcaption><video controls preload="none" src="demo_robot.mp4"></video></figure>
+</div>
+<p class="sub">GIFs under 500 KB load on mobile. MP4s for smooth playback. Both generated by <code>scripts/make_demo.py</code> from the same physics as the benchmarks — never hand-drawn.</p>
+
+<h2>📊 Benchmark figures (auto-regenerated)</h2>
+<div class="media">
+<figure><img src="../results/figures/exp01_grid.png" alt="PI grid overshoot vs IAE"><figcaption>EXP01: overshoot vs IAE across 25 PI settings.</figcaption></figure>
+<figure><img src="../results/figures/exp02_sampling.png" alt="Sampling rate vs error"><figcaption>EXP02: sampling rate vs acquisition error (floor visible).</figcaption></figure>
+<figure><img src="../results/figures/exp03_goodput.png" alt="Protocol goodput comparison"><figcaption>EXP03: protocol goodput ranking (log-scale effect).</figcaption></figure>
+</div>
+
+<h2 id="results">📈 Results — the numbers that matter</h2>
+<div class="grid">
+<div class="card"><div class="num">-92.8%</div>DC drive IAE: 1.611 → <b>0.116</b>, 0% overshoot, 17.5 ms settle (kp=0.3, ki=8.0)</div>
+<div class="card"><div class="num">×1.01</div>100 Hz→5000 Hz MAE: 0.00326→0.00322 V. <b>500 Hz best.</b> Noise floor dominates.</div>
+<div class="card"><div class="num">163×</div>WiFi 90.0 vs CAN 0.55 Mbps — <b>CAN still wins</b> motor-bus on robustness 10/10.</div>
+<div class="card"><div class="num">17 ms</div>Loop budget: sense 4 + control 3 + <b>comm 8</b> + actuate 2 → <b>58.8 Hz</b>.</div>
+</div>
+<table>
+<tr><th>Experiment</th><th>Key table (verified)</th></tr>
+<tr><td>EXP01 PI trade</td><td>ki=1→8: overshoot 0.0/0.19/1.27/3.73/7.75%; IAE 0.9187/0.4701/0.339/0.251/0.2243</td></tr>
+<tr><td>EXP02 sensing</td><td>US 3ms=0.5148m, 6ms=1.0296m; DoA 0/87/174µs=0.0/29.85/84.46°; charlieplex 4 pins=12 LEDs</td></tr>
+<tr><td>EXP03 comms</td><td>ROS topic 0.6 / service 1.8 / action 2.6 ms; picks: motor CAN, encoder SPI, debug UART</td></tr>
+<tr><td>EXP04 integration</td><td>odom 2s (0.508,0.269,1.0rad); arm FK (0.11073,0.18145) IK (45.0°,30.0°); DFM 7.0; circular 6.4</td></tr>
+</table>
+
+<h2 id="stories">🧑‍💻 Who is this for — user stories</h2>
+<table>
+<tr><th>You are…</th><th>Use this repo to…</th><th>Start here</th></tr>
+<tr><td>Student (no hardware)</td><td>Learn drives→sensing→comms→integration with real numbers, no lab needed</td><td>Beginner guide + <code>experiments/exp01*/run.py</code></td></tr>
+<tr><td>Teacher / TA</td><td>Assign 5 labs with auto-grading (<code>verify.py</code> = rubric)</td><td>docs/PAPER.md + results/*.json</td></tr>
+<tr><td>Hobbyist builder</td><td>Size motors, pick CAN vs SPI, budget latency, check 3D-print DFM</td><td>EXP01/03/04 scripts</td></tr>
+<tr><td>ROS 2 developer</td><td>Decide topics vs services vs actions with latency table</td><td><code>src/gems_benchmark/comms.py</code></td></tr>
+<tr><td>Researcher (PhD)</td><td>Extend H1–H5, swap in HIL drivers, publish with replication package</td><td>docs/PAPER.md + exp05</td></tr>
+<tr><td>Hiring manager</td><td>Ask: “Why did 50× sampling buy 1%?” — answer reveals seniority</td><td>Hidden patterns section</td></tr>
+</table>
+
+<h2 id="quick">⚙️ Quickstart (3 steps, copy-paste)</h2>
+<pre>1) pip install -r requirements.txt
+2) python scripts/run_all.py        # 5 exps → results/*.json + figures
+3) python scripts/verify.py &amp;&amp; pytest -q   # 12 checks + 10 tests, all must pass</pre>
+<p>Docker: <code>docker compose up --build</code>. Regenerate demos: <code>python scripts/make_demo.py</code>. Screenshot this page: <code>python scripts/screenshot.py</code>.</p>
+
+<h2 id="verify">✅ Verify — trust, then check</h2>
+<table><tr><th>Gate</th><th>Command</th><th>Must see</th></tr>
+<tr><td>Unit physics</td><td><code>pytest -q</code></td><td>10 passed</td></tr>
+<tr><td>End-to-end</td><td><code>python scripts/run_all.py</code></td><td>ALL EXPERIMENTS OK</td></tr>
+<tr><td>Strict invariants</td><td><code>python scripts/verify.py</code></td><td>12× PASS, exit 0</td></tr>
+<tr><td>Live sources</td><td><code>python scripts/fetch_live_data.py</code></td><td>GEMS + OpenAlex OK</td></tr></table>
+
+<footer>MIT License · Built for learners, teachers, builders, and researchers · Open <code>preview.html</code> locally or serve <code>docs/</code> with any static server · All figures/demos regenerate from code.</footer>
+</div>
+</body>
+</html>
