@@ -1,0 +1,9 @@
+[project]
+name = "gems-benchmark"
+version = "0.1.0"
+description = "Building Robots GEMS benchmark 2026 — reproducible mechatronics integration study"
+requires-python = ">=3.10"
+dependencies = ["numpy", "matplotlib", "pandas", "scipy"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

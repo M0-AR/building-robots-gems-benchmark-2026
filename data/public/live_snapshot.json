@@ -1,0 +1,23 @@
+{
+  "gems_hardware_url": "https://gems-erasmus.eu/hardware/",
+  "modules_expected": [
+    "Diamond",
+    "Ruby",
+    "Sapphire",
+    "Emerald",
+    "Drivetrain",
+    "Robots",
+    "Amethyst",
+    "Citrine"
+  ],
+  "https://gems-erasmus.eu/hardware/": {
+    "bytes": 2000,
+    "ok": true,
+    "head": "<!doctype html><html lang=\"en\" ><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta name=\"theme-color\" media=\"(prefers-color-scheme: light)\" content=\"#f7f7f7\"><meta name=\"theme-color\" media=\"(prefers-color-scheme: dark)\" content=\"#1b1b1e\"><meta name=\"apple-mobile-web-app-c"
+  },
+  "https://api.openalex.org/works?search=mechatronics+mobile+robot&per-page=3": {
+    "bytes": 2000,
+    "ok": true,
+    "head": "{\"meta\": {\"count\": 48230, \"db_response_time_ms\": 69, \"page\": 1, \"per_page\": 3, \"groups_count\": null, \"x_query\": {\"oql\": \"get works where full text has (mechatronics mobile robot)\", \"oqo\": {\"get_rows\": \"works\", \"filter_rows\": [{\"column_id\": \"fulltext.search\", \"value\": \"mechatronics mobile robot\", \"op"
+  }
+}
